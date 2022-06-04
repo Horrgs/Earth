@@ -92,7 +92,7 @@ class AlertCollection:
 # def get_alerts(location):
 #     url = "https://api.weather.gov/gridpoints/{0}/{1}/alerts{2}"  # station id, grid_loc, addtl. args.
 #     url = url.format(location['id'], location['grid_location'], '')
-#     req = utils.send(url, utils.RequestMethod.GET, None)
+#     req = needaname.send(url, needaname.RequestMethod.GET, None)
 #
 #     for item in req['features']:
 #         p = Alert(item)
