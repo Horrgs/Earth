@@ -1,3 +1,7 @@
+import dataclasses
+import json
+import typing
+
 # API documentation: https://www.weather.gov/documentation/services-web-api
 
 

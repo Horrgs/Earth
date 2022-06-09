@@ -1,40 +1,16 @@
 from needaname import req
 from wrappers.weather.weathergov.utils import QuantitativeValue
+import dataclasses
+import json
+import typing
 
 
 class Gridpoint:
+    # fetch raw forecast data for a specific gridpoint of a given NWS office.
     pass
 
 
-class GridpointForecast:
-    # fetch forecast for a specific gridpoint of a given NWS office.
-
-    def __init__(self, foo):
-        # self.context = foo['@context']  # JsonLdContext
-        # self.geometry = foo['geometry']  # GeometryString.
-        # self.units = foo['units']  # Specifies the units that are used in the text parts of the forecast.
-        self.forecast_generator = foo['forecastGenerator']  # Generator that was used to create the textual forecast (per NWS, only relevant for debugging.)
-        self.generated_at = foo['generatedAt']  # time the forecast data was generated.
-        self.update_time = foo['updateTime']  # last time the data for this forecast was updated.
-        # self.valid_times = foo['validTimes'] # ISO8601Interval
-        self.elevation = QuantitativeValue(foo['elevation'])  # elevation of the forecast area.
-        self.periods = [Period(i) for i in foo['periods']]  # an array of forecast periods.
-
-
-class GridpointForecastGeoJson:
-    # fetch forecast for a specific gridpoint of a given NWS office, using GeoJSON.
-    # 14 12-hour periods, giving 7-day forecast. Endpoint: https://api.weather.gov/gridpoints/TOP/31,80/forecast
-    # 156 -1hour periods, giving 7-day forecast. Endpoint: https://api.weather.gov/gridpoints/TOP/31,80/forecast/hourly.
-
-    def __init__(self, foo):
-        self.context = foo['@context']  # JsonLdContext
-        self.id = foo['id']  # ?
-        self.type = foo['type']  # ?
-        self.geometry = foo['geometry']  # GeoJsonGeometry.
-        self.properties = GridpointForecast(foo['properties'])
-
-
-class Period:  # GridpointForecastPeriod schema, look at GridpointForecastGeoJson.
+class GridpointForecastPeriod:  # GridpointForecastPeriod schema, look at GridpointForecastGeoJson.
     #  period = None
 
     def __init__(self, period):
@@ -83,3 +59,31 @@ class Period:  # GridpointForecastPeriod schema, look at GridpointForecastGeoJso
 
         self.short_forecast = period['shortForecast']  # short text summary of the forecast for the period.
         self.detailed_forecast = period['detailedForecast']  # detailed text description of the forecast for the period.
+
+
+class GridpointForecast:
+    # fetch detailed & textual forecast for a specific gridpoint of a given NWS office.
+
+    def __init__(self, foo):
+        # self.context = foo['@context']  # JsonLdContext
+        # self.geometry = foo['geometry']  # GeometryString.
+        # self.units = foo['units']  # Specifies the units that are used in the text parts of the forecast.
+        self.forecast_generator = foo['forecastGenerator']  # Generator that was used to create the textual forecast (per NWS, only relevant for debugging.)
+        self.generated_at = foo['generatedAt']  # time the forecast data was generated.
+        self.update_time = foo['updateTime']  # last time the data for this forecast was updated.
+        # self.valid_times = foo['validTimes'] # ISO8601Interval
+        self.elevation = QuantitativeValue(foo['elevation'])  # elevation of the forecast area.
+        self.periods = [GridpointForecastPeriod(i) for i in foo['periods']]  # an array of forecast periods.
+
+
+class GridpointForecastGeoJson:
+    # fetch forecast for a specific gridpoint of a given NWS office, using GeoJSON.
+    # 14 12-hour periods, giving 7-day forecast. Endpoint: https://api.weather.gov/gridpoints/TOP/31,80/forecast
+    # 156 -1hour periods, giving 7-day forecast. Endpoint: https://api.weather.gov/gridpoints/TOP/31,80/forecast/hourly.
+
+    def __init__(self, foo):
+        self.context = foo['@context']  # JsonLdContext
+        self.id = foo['id']  # ?
+        self.type = foo['type']  # ?
+        self.geometry = foo['geometry']  # GeoJsonGeometry.
+        self.properties = GridpointForecast(foo['properties'])
