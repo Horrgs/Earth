@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass
 import json
 import typing
 
@@ -7,31 +7,28 @@ class Zone:
     pass
 
 
+@dataclass
 class ZoneForecast:
-
-    def __init__(self, response):
-        self.context = response['@context']
-        self.geometry = response['geometry']
-        self.zone = response['zone']
-        self.updated = response['updated']
-        self.periods = response['periods']
+    context: None  # JsonLdContext.
+    geometry: None  # GeometryString (nullable: true)
+    zone: None  # uri (API) link to the zone the forecast pertains to.
+    updated: None  # time this forecast was published (not updated???) in ISO8601 format.
+    periods: None  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
 
 
+@dataclass
 class ZoneForecastGeoJson:
-
-    def __init__(self, response):
-        self.context = response['@context']
-        self.id = response['id']
-        self.type = response['type']
-        self.geometry = response['geometry']
-        self.properties = response['properties']
+    context: None  # JsonLdContext.
+    id: None  # unknown meaning.
+    type: None  # unknown meaning. Only one possible value: "Feature."
+    geometry: None  # GeoJsonGeometry.
+    properties: None  # ZoneForecast object.
 
 
+@dataclass
 class ZoneForecastJsonLd:
-
-    def __init__(self, response):
-        self.context = response['@context']
-        self.geometry = response['geometry']
-        self.zone = response['zone']
-        self.updated = response['updated']
-        self.periods = response['periods']
+    context: None  # JsonLdContext.
+    geometry: None  # GeometryString (nullable: true)
+    zone: None  # uri (API) link to the zone the forecast pertains to.
+    updated: None  # time this forecast was published (not updated???) in ISO8601 format.
+    periods: None  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.

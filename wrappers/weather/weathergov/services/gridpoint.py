@@ -1,26 +1,83 @@
 from needaname import req
 from wrappers.weather.weathergov.utils import QuantitativeValue
-import dataclasses
+from dataclasses import dataclass
 import json
 import typing
 
 
+@dataclass
+class GridpointForecastPeriod:
+    """ Class representing detailed forecast data for a specific time period for a gridpoint.
+    Follows NWS GridpointForecastPeriod schema. """
+
+    number: int  # sequential number ID of the forecasted period.
+    name: str  # text description of the forecasted period. (e.g. Tuesday Night)
+
+    start_time: str  # ISO8601 timestamp. start time of the forecasted period.
+    # Example output (2022-06-09T06:08:03+00:00). Unsure of timezone handling.
+
+    end_time: str  # ISO8601 timestamp. end time of the forecasted period.
+    # Example output (2022-06-09T06:08:03+00:00). Unsure of timezone handling.
+
+    is_daytime: bool  # boolean val on whether its daytime (True) or nighttime (False).
+
+    temperature: None  # sort of deprecated. see gridpoint.py (old) & docs.
+    temperature_unit: None  # sort of deprecated. see gridpoint.py (old) & docs.
+
+    temperature_trend: str  # If not null, indicates a temperature trend that doesn't follow diurnal (day-night) cycles.
+    #  only two possible values - "rising" [overnight] & "falling" [during daytime]. NULLABLE.
+
+    wind_speed: None  # sort of deprecated. see gridpoint.py (old) & docs.
+    wind_gust: None  # sort of deprecated. see gridpoint.py (old) & docs.
+
+    wind_direction: str  # text description indicating wind direction (e.g. ESE for east-southeast)
+
+    icon: None  # Technically deprecated, but still appears in response.
+    # icon graphic representing the forecast (e.g. sun for clear skies/sunny weather).
+
+    short_forecast: str  # short text summary of the forecast for the given forecast period.
+    detailed_forecast: str  # long, detailed summary of the forecast for the given forecast period.
+
+
+@dataclass
+class GridpointForecast:
+    """ Class representing detailed forecast data for a gridpoint. Follows NWS GridpointForecast schema. """
+
+    context: None  # JsonLdContext. ['@context']
+    geometry: None  # GeometryString. NULLABLE.
+
+    units: str  # Specifies the units that are used in the text parts of the forecast.
+    # Only two possible values - "us" & "si"
+
+    forecast_generator: str  # the generator used to create the text-based forecast. Only relevant for debugging.
+    generated_at: str  # ISO8601 timestamp. The timestamp the forecast was generated.
+    update_time: str  # ISO8601 timestamp. The timestamp the forecast was generated.
+    valid_times: str  # ISO8601 timestamp.
+    elevation: None  # QuantitativeValue. elevation of the forecast area.
+    periods: [GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
+
+
+@dataclass
+class GridpointForecastGeoJson:
+    """ Class representing detailed forecast data for a gridpoint using advanced geolocation tools.
+    Follows NWS GridpointForecastGeoJson schema. """
+
+    context: None  # JsonLdContext. ['@context']
+    id: None  # unknown meaning.
+    type: str  # unknown meaning. Only one possible value: "Feature."
+    geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
+    properties: None  # returns GridpointForecast object.
+
+
 class Gridpoint:
-    # fetch raw forecast data for a specific gridpoint of a given NWS office.
+    """ Class representing raw forecast data for a gridpoint. Follows NWS Gridpoint schema."""
     pass
 
 
-class GridpointForecastPeriod:  # GridpointForecastPeriod schema, look at GridpointForecastGeoJson.
+class GridpointForecastPeriodOld:  # GridpointForecastPeriod schema, look at GridpointForecastGeoJson.
     #  period = None
 
     def __init__(self, period):
-        self.number = period['number']  # sequential number ID of the forecasted period.
-        self.name = period['name']  # text description of the forecasted period. (e.g. Tuesday Night)
-
-        self.start_time = period['startTime']  # start time of the forecasted period.
-        self.end_time = period['endTime']  # end time of the forecasted period.
-        self.is_daytime = period['isDaytime']  # boolean val on whether its daytime (True) or nighttime (False).
-
         self.temperature = period['temperature']
         """
             Sort of deprecated? There are two flags under temperature - description and "?? one of ??". Per NWS for
@@ -52,38 +109,3 @@ class GridpointForecastPeriod:  # GridpointForecastPeriod schema, look at Gridpo
         feature flag on the request."""
         # self.wind_gust = QuantitativeValue(period['windGust'])
 
-        self.wind_direction = period['windDirection']
-        # text description (e.g. SSE) of the prevailing wind direction.
-
-        self.icon = period['icon']  # deprecated per NWS docs, no indication of replacement.
-
-        self.short_forecast = period['shortForecast']  # short text summary of the forecast for the period.
-        self.detailed_forecast = period['detailedForecast']  # detailed text description of the forecast for the period.
-
-
-class GridpointForecast:
-    # fetch detailed & textual forecast for a specific gridpoint of a given NWS office.
-
-    def __init__(self, foo):
-        # self.context = foo['@context']  # JsonLdContext
-        # self.geometry = foo['geometry']  # GeometryString.
-        # self.units = foo['units']  # Specifies the units that are used in the text parts of the forecast.
-        self.forecast_generator = foo['forecastGenerator']  # Generator that was used to create the textual forecast (per NWS, only relevant for debugging.)
-        self.generated_at = foo['generatedAt']  # time the forecast data was generated.
-        self.update_time = foo['updateTime']  # last time the data for this forecast was updated.
-        # self.valid_times = foo['validTimes'] # ISO8601Interval
-        self.elevation = QuantitativeValue(foo['elevation'])  # elevation of the forecast area.
-        self.periods = [GridpointForecastPeriod(i) for i in foo['periods']]  # an array of forecast periods.
-
-
-class GridpointForecastGeoJson:
-    # fetch forecast for a specific gridpoint of a given NWS office, using GeoJSON.
-    # 14 12-hour periods, giving 7-day forecast. Endpoint: https://api.weather.gov/gridpoints/TOP/31,80/forecast
-    # 156 -1hour periods, giving 7-day forecast. Endpoint: https://api.weather.gov/gridpoints/TOP/31,80/forecast/hourly.
-
-    def __init__(self, foo):
-        self.context = foo['@context']  # JsonLdContext
-        self.id = foo['id']  # ?
-        self.type = foo['type']  # ?
-        self.geometry = foo['geometry']  # GeoJsonGeometry.
-        self.properties = GridpointForecast(foo['properties'])
