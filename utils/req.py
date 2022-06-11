@@ -32,7 +32,7 @@ parameter: payload -
 """
 
 # TODO: check what data is in request.
-# TODO: check if try can end at specified point.
+# TODO: check if 'try' can end at specified point.
 # TODO: see if it's possible to remove first if statement.
 def send(url, method: RequestMethod, payload=None):
     try:

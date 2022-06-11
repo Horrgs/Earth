@@ -1,8 +1,8 @@
-from needaname import req
+from utils import req
 from wrappers.weather.weathergov.utils import QuantitativeValue
 from dataclasses import dataclass
 import json
-import typing
+from typing import Optional, List, Dict
 
 
 @dataclass
@@ -13,21 +13,19 @@ class GridpointForecastPeriod:
     number: int  # sequential number ID of the forecasted period.
     name: str  # text description of the forecasted period. (e.g. Tuesday Night)
 
-    start_time: str  # ISO8601 timestamp. start time of the forecasted period.
-    # Example output (2022-06-09T06:08:03+00:00). Unsure of timezone handling.
+    start_time: str  # ISO8601 timestamp. start time of the forecasted period with offset from UTC (-5).
+    # Example output (2022-06-11T01:00:00-05:00).
 
-    end_time: str  # ISO8601 timestamp. end time of the forecasted period.
-    # Example output (2022-06-09T06:08:03+00:00). Unsure of timezone handling.
+    end_time: str  # ISO8601 timestamp. end time of the forecasted period with offset from UTC (-5).
+    # Example output (2022-06-11T01:00:00-05:00).
 
     is_daytime: bool  # boolean val on whether its daytime (True) or nighttime (False).
 
-    temperature: None  # sort of deprecated. see gridpoint.py (old) & docs.
-    temperature_unit: None  # sort of deprecated. see gridpoint.py (old) & docs.
-
+    temperature: Dict[QuantitativeValue]  # sort of deprecated. see gridpoint.py (old) & docs.
     temperature_trend: str  # If not null, indicates a temperature trend that doesn't follow diurnal (day-night) cycles.
     #  only two possible values - "rising" [overnight] & "falling" [during daytime]. NULLABLE.
 
-    wind_speed: None  # sort of deprecated. see gridpoint.py (old) & docs.
+    wind_speed: Dict[QuantitativeValue]  # sort of deprecated. see gridpoint.py (old) & docs.
     wind_gust: None  # sort of deprecated. see gridpoint.py (old) & docs.
 
     wind_direction: str  # text description indicating wind direction (e.g. ESE for east-southeast)
@@ -53,8 +51,8 @@ class GridpointForecast:
     generated_at: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     update_time: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     valid_times: str  # ISO8601 timestamp.
-    elevation: None  # QuantitativeValue. elevation of the forecast area.
-    periods: [GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
+    elevation: Dict[QuantitativeValue]  # QuantitativeValue. elevation of the forecast area.
+    periods: List[GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
 
 
 @dataclass
@@ -66,46 +64,78 @@ class GridpointForecastGeoJson:
     id: None  # unknown meaning.
     type: str  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
-    properties: None  # returns GridpointForecast object.
+    properties: Dict[GridpointForecast]  # returns GridpointForecast object.
 
 
+@dataclass
 class Gridpoint:
-    """ Class representing raw forecast data for a gridpoint. Follows NWS Gridpoint schema."""
-    pass
+    """ Class representing raw forecast data for a gridpoint. Follows NWS Gridpoint schema.
+    Depending on the gridpoint, not all fields will be available, and it is unknown at this time which fields those are,
+    or the gridpoints where that might occur."""
 
+    temperature: None
+    dewpoint: None
+    max_temperature: None
+    min_temperature: None
+    relative_humidity: None
+    apparent_temperature: None
 
-class GridpointForecastPeriodOld:  # GridpointForecastPeriod schema, look at GridpointForecastGeoJson.
-    #  period = None
+    heat_index: None
 
-    def __init__(self, period):
-        self.temperature = period['temperature']
-        """
-            Sort of deprecated? There are two flags under temperature - description and "?? one of ??". Per NWS for
-            description, "High/low temperature for the period, depending on whether the period is day or night. 
-            This property as an integer value is deprecated. Future versions will express this value as a quantitative 
-            value object. To make use of the future standard format now, set the "forecast_temperature_qv" feature 
-            flag on the request.
-        """
-        # self.temperature = QuantitativeValue(period['temperature'])
+    wind_chill: None
+    sky_cover: None
+    wind_direction: None
+    wind_speed: None
+    wind_gust: None
 
-        self.temperature_unit = period['temperatureUnit']  # unit of the temperature value.
-        """TODO: This property is deprecated. Future versions will indicate the unit within the quantitative value
-         object for the temperature property. To make use of the future standard format now, set the
-         forecast_temperature_qv feature flag on the request."""
+    weather: None
+    hazards: None
 
-        self.temperature_trend = period['temperatureTrend']  # if not null, indicates temperature trend that doesn't
-        # follow day-night cycle for forecasted period
+    probability_of_precipitation: None
+    quantitative_precipitation: None
+    ice_accumulation: None
+    snowfall_amount: None
+    snow_level: None
+    ceiling_height: None
+    visibility: None
+    transport_wind_speed: None
+    transport_wind_direction: None
 
-        self.wind_speed = period['windSpeed']  # wind speed for the period.
-        """TODO: This property as an string value is deprecated. Future versions will express this value as a 
-        quantitative value object. To make use of the future standard format now, set the forecast_wind_speed_qv" 
-        feature flag on the request."""
+    mixing_height: None
+    haines_index: None
+    lightning_activity_level: None
 
-        # self.wind_speed = QuantitativeValue(period['windSpeed'])
+    twenty_foot_wind_speed: None
+    twenty_foot_wind_direction: None
 
-        self.wind_gust = period['windGust']  # peak wind gust for the period.
-        """TODO: Per NWS docs, This property as an string value is deprecated. Future versions will express this value 
-        as a quantitative value object. To make use of the future standard format now, set the "forecast_wind_speed_qv" 
-        feature flag on the request."""
-        # self.wind_gust = QuantitativeValue(period['windGust'])
+    primary_swell_height: None
+    primary_swell_direction: None
+    secondary_swell_height: None
+    secondary_swell_direction: None
+    wave_period_2: None
+    wind_wave_height: None
+
+    dispersion_index: None
+    pressure: None
+
+    probability_of_tropical_storm_winds: None
+    probability_of_hurricane_winds: None
+
+    potential_of_15mph_winds: None
+    potential_of_25mph_winds: None
+    potential_of_35mph_winds: None
+    potential_of_45mph_winds: None
+
+    potential_of_20mph_wind_gusts: None
+    potential_of_30mph_wind_gusts: None
+    potential_of_40mph_wind_gusts: None
+    potential_of_50mph_wind_gusts: None
+    potential_of_60mph_wind_gusts: None
+
+    grassland_fire_danger_index: None
+    davis_stability_index: None
+    atmospheric_dispersion_index: None
+    low_visibility_occurrence_risk_index: None
+    stability: None
+    red_flag_threat_index: None
 
