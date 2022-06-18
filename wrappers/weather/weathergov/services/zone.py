@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from dataclasses_json import config, dataclass_json
 import json
 import typing
 
@@ -7,9 +8,10 @@ class Zone:
     pass
 
 
+@dataclass_json
 @dataclass
 class ZoneForecast:
-    context: None  # JsonLdContext.
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     geometry: None  # GeometryString (nullable: true)
     zone: None  # uri (API) link to the zone the forecast pertains to.
     updated: None  # time this forecast was published (not updated???) in ISO8601 format.
@@ -18,7 +20,7 @@ class ZoneForecast:
 
 @dataclass
 class ZoneForecastGeoJson:
-    context: None  # JsonLdContext.
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     id: None  # unknown meaning.
     type: None  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry.
@@ -27,7 +29,7 @@ class ZoneForecastGeoJson:
 
 @dataclass
 class ZoneForecastJsonLd:
-    context: None  # JsonLdContext.
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     geometry: None  # GeometryString (nullable: true)
     zone: None  # uri (API) link to the zone the forecast pertains to.
     updated: None  # time this forecast was published (not updated???) in ISO8601 format.

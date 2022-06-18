@@ -14,6 +14,13 @@ class QuantitativeValue:
 
 # Schema types
 
+class GridpointQuantitativeValueLayer:
+
+    def __init__(self, item):
+        self.uom = item['uom']
+        self.values = item['values']
+
+
 class Collection:
 
     def __init__(self, response):

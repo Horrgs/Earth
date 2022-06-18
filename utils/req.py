@@ -1,4 +1,5 @@
 import json, requests, enum
+from wrappers.weather.weathergov.services.gridpoint import GridpointForecastGeoJson
 
 # module for request & request-adjacent methods.
 
@@ -43,7 +44,7 @@ def send(url, method: RequestMethod, payload=None):
             req = requests.request(method.value, url, data=payload)  # valid payload to send with HTTP request.
         else:
             req = requests.request(method.value, url)  # no payload to send, send remaining info.
-        print(req.text)
+        # print(req.text)
         # TODO: check if try can end here.
 
         # load response from HTTP request.
@@ -53,7 +54,7 @@ def send(url, method: RequestMethod, payload=None):
             response[item['Text']] = int(item['Value'])  # place item in the response dict.
         response = dict(sorted(response.items(), key=lambda obj: obj[1]))  # sort response dict based on X.
         return response  # return response dict. """
-
+        print(req.headers)
         return req.json()
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)
@@ -66,3 +67,27 @@ def check_status(url, method: RequestMethod):
 
 
 # TODO: create cache system.
+
+
+def get(url, method: RequestMethod):
+    headers = {
+        'User-Agent': 'https://www.github.com/Horrgs/Earth',
+        'Feature-Flag': 'forecast_temperature_qv'
+    }
+    try:
+        req = requests.request(method=method.value, url=url, headers=headers)  # prepare & send HTTP request.
+        # TODO: check if try can end here.
+        if req.status_code != 200:
+            pass  # raise error of bad response.
+        return req.json()  # returns json (dict) formatted response of request.
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)
+    except ValueError as e:
+        print(e)
+
+
+response = get('https://api.weather.gov/gridpoints/TOP/31,80/forecast', RequestMethod.GET)
+print(response)
+
+p = GridpointForecastGeoJson.from_json(json.dumps(response))
+print(p.properties.periods)

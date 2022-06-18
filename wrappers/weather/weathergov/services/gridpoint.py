@@ -1,6 +1,6 @@
-from utils import req
-from wrappers.weather.weathergov.utils import QuantitativeValue
-from dataclasses import dataclass
+from wrappers.weather.weathergov.utils import QuantitativeValue, GridpointQuantitativeValueLayer
+from dataclasses import dataclass, field
+from dataclasses_json import config, dataclass_json
 import json
 from typing import Optional, List, Dict
 
@@ -37,12 +37,13 @@ class GridpointForecastPeriod:
     detailed_forecast: str  # long, detailed summary of the forecast for the given forecast period.
 
 
+@dataclass_json
 @dataclass
 class GridpointForecast:
     """ Class representing detailed forecast data for a gridpoint. Follows NWS GridpointForecast schema. """
 
-    context: None  # JsonLdContext. ['@context']
-    geometry: None  # GeometryString. NULLABLE.
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    geometry: Optional[str]  # GeometryString. NULLABLE.
 
     units: str  # Specifies the units that are used in the text parts of the forecast.
     # Only two possible values - "us" & "si"
@@ -55,12 +56,13 @@ class GridpointForecast:
     periods: List[GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
 
 
+@dataclass_json
 @dataclass
 class GridpointForecastGeoJson:
     """ Class representing detailed forecast data for a gridpoint using advanced geolocation tools.
     Follows NWS GridpointForecastGeoJson schema. """
 
-    context: None  # JsonLdContext. ['@context']
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     id: None  # unknown meaning.
     type: str  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
@@ -73,69 +75,69 @@ class Gridpoint:
     Depending on the gridpoint, not all fields will be available, and it is unknown at this time which fields those are,
     or the gridpoints where that might occur."""
 
-    temperature: None
-    dewpoint: None
-    max_temperature: None
-    min_temperature: None
-    relative_humidity: None
-    apparent_temperature: None
+    temperature: Optional[GridpointQuantitativeValueLayer]
+    dewpoint: Optional[GridpointQuantitativeValueLayer]
+    max_temperature: Optional[GridpointQuantitativeValueLayer]
+    min_temperature: Optional[GridpointQuantitativeValueLayer]
+    relative_humidity: Optional[GridpointQuantitativeValueLayer]
+    apparent_temperature: Optional[GridpointQuantitativeValueLayer]
 
-    heat_index: None
+    heat_index: Optional[GridpointQuantitativeValueLayer]
 
-    wind_chill: None
-    sky_cover: None
-    wind_direction: None
-    wind_speed: None
-    wind_gust: None
+    wind_chill: Optional[GridpointQuantitativeValueLayer]
+    sky_cover: Optional[GridpointQuantitativeValueLayer]
+    wind_direction: Optional[GridpointQuantitativeValueLayer]
+    wind_speed: Optional[GridpointQuantitativeValueLayer]
+    wind_gust: Optional[GridpointQuantitativeValueLayer]
 
-    weather: None
-    hazards: None
+    weather: Optional[GridpointQuantitativeValueLayer]
+    hazards: Optional[GridpointQuantitativeValueLayer]
 
-    probability_of_precipitation: None
-    quantitative_precipitation: None
-    ice_accumulation: None
-    snowfall_amount: None
-    snow_level: None
-    ceiling_height: None
-    visibility: None
-    transport_wind_speed: None
-    transport_wind_direction: None
+    probability_of_precipitation: Optional[GridpointQuantitativeValueLayer]
+    quantitative_precipitation: Optional[GridpointQuantitativeValueLayer]
+    ice_accumulation: Optional[GridpointQuantitativeValueLayer]
+    snowfall_amount: Optional[GridpointQuantitativeValueLayer]
+    snow_level: Optional[GridpointQuantitativeValueLayer]
+    ceiling_height: Optional[GridpointQuantitativeValueLayer]
+    visibility: Optional[GridpointQuantitativeValueLayer]
+    transport_wind_speed: Optional[GridpointQuantitativeValueLayer]
+    transport_wind_direction: Optional[GridpointQuantitativeValueLayer]
 
-    mixing_height: None
-    haines_index: None
-    lightning_activity_level: None
+    mixing_height: Optional[GridpointQuantitativeValueLayer]
+    haines_index: Optional[GridpointQuantitativeValueLayer]
+    lightning_activity_level: Optional[GridpointQuantitativeValueLayer]
 
-    twenty_foot_wind_speed: None
-    twenty_foot_wind_direction: None
+    twenty_foot_wind_speed: Optional[GridpointQuantitativeValueLayer]
+    twenty_foot_wind_direction: Optional[GridpointQuantitativeValueLayer]
 
-    primary_swell_height: None
-    primary_swell_direction: None
-    secondary_swell_height: None
-    secondary_swell_direction: None
-    wave_period_2: None
-    wind_wave_height: None
+    primary_swell_height: Optional[GridpointQuantitativeValueLayer]
+    primary_swell_direction: Optional[GridpointQuantitativeValueLayer]
+    secondary_swell_height: Optional[GridpointQuantitativeValueLayer]
+    secondary_swell_direction: Optional[GridpointQuantitativeValueLayer]
+    wave_period_2: Optional[GridpointQuantitativeValueLayer]
+    wind_wave_height: Optional[GridpointQuantitativeValueLayer]
 
-    dispersion_index: None
-    pressure: None
+    dispersion_index: Optional[GridpointQuantitativeValueLayer]
+    pressure: Optional[GridpointQuantitativeValueLayer]
 
-    probability_of_tropical_storm_winds: None
-    probability_of_hurricane_winds: None
+    probability_of_tropical_storm_winds: Optional[GridpointQuantitativeValueLayer]
+    probability_of_hurricane_winds: Optional[GridpointQuantitativeValueLayer]
 
-    potential_of_15mph_winds: None
-    potential_of_25mph_winds: None
-    potential_of_35mph_winds: None
-    potential_of_45mph_winds: None
+    potential_of_15mph_winds: Optional[GridpointQuantitativeValueLayer]
+    potential_of_25mph_winds: Optional[GridpointQuantitativeValueLayer]
+    potential_of_35mph_winds: Optional[GridpointQuantitativeValueLayer]
+    potential_of_45mph_winds: Optional[GridpointQuantitativeValueLayer]
 
-    potential_of_20mph_wind_gusts: None
-    potential_of_30mph_wind_gusts: None
-    potential_of_40mph_wind_gusts: None
-    potential_of_50mph_wind_gusts: None
-    potential_of_60mph_wind_gusts: None
+    potential_of_20mph_wind_gusts: Optional[GridpointQuantitativeValueLayer]
+    potential_of_30mph_wind_gusts: Optional[GridpointQuantitativeValueLayer]
+    potential_of_40mph_wind_gusts: Optional[GridpointQuantitativeValueLayer]
+    potential_of_50mph_wind_gusts: Optional[GridpointQuantitativeValueLayer]
+    potential_of_60mph_wind_gusts: Optional[GridpointQuantitativeValueLayer]
 
-    grassland_fire_danger_index: None
-    davis_stability_index: None
-    atmospheric_dispersion_index: None
-    low_visibility_occurrence_risk_index: None
-    stability: None
-    red_flag_threat_index: None
+    grassland_fire_danger_index: Optional[GridpointQuantitativeValueLayer]
+    davis_stability_index: Optional[GridpointQuantitativeValueLayer]
+    atmospheric_dispersion_index: Optional[GridpointQuantitativeValueLayer]
+    low_visibility_occurrence_risk_index: Optional[GridpointQuantitativeValueLayer]
+    stability: Optional[GridpointQuantitativeValueLayer]
+    red_flag_threat_index: Optional[GridpointQuantitativeValueLayer]
 
