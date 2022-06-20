@@ -1,10 +1,11 @@
 from wrappers.weather.weathergov.utils import QuantitativeValue, GridpointQuantitativeValueLayer
 from dataclasses import dataclass, field
-from dataclasses_json import config, dataclass_json
+from dataclasses_json import LetterCase, config, dataclass_json
 import json
 from typing import Optional, List, Dict
 
 
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class GridpointForecastPeriod:
     """ Class representing detailed forecast data for a specific time period for a gridpoint.
@@ -21,29 +22,28 @@ class GridpointForecastPeriod:
 
     is_daytime: bool  # boolean val on whether its daytime (True) or nighttime (False).
 
-    temperature: Dict[QuantitativeValue]  # sort of deprecated. see gridpoint.py (old) & docs.
-    temperature_trend: str  # If not null, indicates a temperature trend that doesn't follow diurnal (day-night) cycles.
+    # temperature: QuantitativeValue  # sort of deprecated. see gridpoint.py (old) & docs.
+    temperature: int
     #  only two possible values - "rising" [overnight] & "falling" [during daytime]. NULLABLE.
 
-    wind_speed: Dict[QuantitativeValue]  # sort of deprecated. see gridpoint.py (old) & docs.
-    wind_gust: None  # sort of deprecated. see gridpoint.py (old) & docs.
-
+    # wind_speed: QuantitativeValue  # sort of deprecated. see gridpoint.py (old) & docs.
+    wind_speed: str
     wind_direction: str  # text description indicating wind direction (e.g. ESE for east-southeast)
 
-    icon: None  # Technically deprecated, but still appears in response.
+    icon: str  # Technically deprecated, but still appears in response.
     # icon graphic representing the forecast (e.g. sun for clear skies/sunny weather).
 
     short_forecast: str  # short text summary of the forecast for the given forecast period.
     detailed_forecast: str  # long, detailed summary of the forecast for the given forecast period.
 
+    wind_gust: Optional[str] = None  # sort of deprecated. see gridpoint.py (old) & docs.
+    temperature_trend: Optional[str] = None  # If not null, indicates a temperature trend that doesn't follow diurnal (day-night) cycles.
 
-@dataclass_json
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class GridpointForecast:
     """ Class representing detailed forecast data for a gridpoint. Follows NWS GridpointForecast schema. """
-
-    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
-    geometry: Optional[str]  # GeometryString. NULLABLE.
 
     units: str  # Specifies the units that are used in the text parts of the forecast.
     # Only two possible values - "us" & "si"
@@ -52,23 +52,28 @@ class GridpointForecast:
     generated_at: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     update_time: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     valid_times: str  # ISO8601 timestamp.
-    elevation: Dict[QuantitativeValue]  # QuantitativeValue. elevation of the forecast area.
+    elevation: Dict  # QuantitativeValue. elevation of the forecast area.
     periods: List[GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
 
+    # context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    geometry: Optional[str] = None # GeometryString. NULLABLE.
 
-@dataclass_json
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class GridpointForecastGeoJson:
     """ Class representing detailed forecast data for a gridpoint using advanced geolocation tools.
     Follows NWS GridpointForecastGeoJson schema. """
 
     context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
-    id: None  # unknown meaning.
     type: str  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
-    properties: Dict[GridpointForecast]  # returns GridpointForecast object.
+    properties: GridpointForecast  # returns GridpointForecast object.
+
+    id: Optional[str] = None  # unknown meaning.
 
 
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class Gridpoint:
     """ Class representing raw forecast data for a gridpoint. Follows NWS Gridpoint schema.
