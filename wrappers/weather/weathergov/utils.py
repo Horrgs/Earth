@@ -1,3 +1,13 @@
+from dataclasses import dataclass, field
+from dataclasses_json import config, dataclass_json, LetterCase
+from typing import Union
+
+from services.alerts import Alert
+from services.gridpoint import Gridpoint, GridpointForecast
+from services.zone import Zone, ZoneForecast
+from services.point import Point
+
+
 class QuantitativeValue:
     # NWS schema for quantitative values (e.g. temperature)
     # The NWS QuantitativeValue Schema is a modified version of https://schema.org/QuantitativeValue
@@ -21,35 +31,34 @@ class GridpointQuantitativeValueLayer:
         self.values = item['values']
 
 
-class Collection:
-
-    def __init__(self, response):
-        self.context = response['@context']  # JsonLdContext.
-        self.type = response['type']  # enum of type string, with only value being FeatureCollection.
-        self.features = response['features']  # unkown.
-        self.title = response['title']  # title describing the collection.
-        self.updated = response['updated']  # last time a modification to the collection occurred.
-        self.pagination = response['pagination']  # more results
-
-
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
 class GeoJson:
+    """ Class representing data for a weather.gov request to Zone, Gridpoint, etc,. in GeoJson format..
+        Follows NWS *GeoJson schema. """
 
-    def __init__(self, response):
-        self.context = response['@context']  # JsonLdContext.
-        self.id = response['id']  # string uri
-        self.type = response['type']  # enum of type string, with only value being 'Feature'.
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    id: str  # uri string. unknown meaning.
+    type: str  # unknown meaning. Only one possible value: "Feature."
+    geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
 
-        self.geometry = response['geometry']  # GeoJsonGeometry.
-        # self.properties = response['properties']
-        # technically in schema, but unsure how we'll incorporate it in class inheritances
-        # bc for alerts/geo+json, properties is of type Alert, whereas for forecast it is of type
-        # GridpointForecast, etc,.
+    properties: Union[Alert, Gridpoint, GridpointForecast, Zone, ZoneForecast]
+    # depending on the request, properties can take the value of Alert, Gridpoint, GridpointForecast, and more.
 
 
+@dataclass
 class JsonLd:
+    pass
 
-    def __init__(self):
-        pass
+
+@dataclass
+class Collection:
+    context: None  # JsonLdContext.
+    type: None  # enum of type string, with only value being FeatureCollection.
+    features: None  # unknown.
+    title: None   # title describing the collection.
+    updated: None  # last time a modification to the collection occurred.
+    pagination: None  # more results
 
 
 # class Foo is labeled as a placeholder, as its unknown how Zone differs from ZoneGeoJson.
