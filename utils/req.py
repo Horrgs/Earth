@@ -1,10 +1,7 @@
-import json, requests, enum
-from wrappers.weather.weathergov.services.gridpoint import GridpointForecastGeoJson
+import enum
+import requests
 
 # module for request & request-adjacent methods.
-
-
-
 
 """
 RequestMethod - the Hypertext Transfer Protocol (HTTP) has a number of methods - GET, HEAD, CONNECT, POST, etc,. 
@@ -24,15 +21,10 @@ class RequestMethod(enum.Enum):
     DELETE = "DELETE"  # send HTTP request via DELETE method.
 
 
-# method to check if web API is available. 200 HTTP is 'OK' status.
-def check_status(url, method: RequestMethod):
-    pass
-
-
 # TODO: check what data is in request.
 # TODO: check if 'try' can end at specified point.
 # TODO: see if it's possible to remove first if statement.
-def get(url, method: RequestMethod, payload=None):
+def req(url, method: RequestMethod, payload=None):
     headers = {
         'User-Agent': 'https://www.github.com/Horrgs/Earth',
         'Feature-Flag': 'forecast_temperature_qv'
@@ -54,3 +46,4 @@ def get(url, method: RequestMethod, payload=None):
 
 
 # TODO: create cache system.
+
