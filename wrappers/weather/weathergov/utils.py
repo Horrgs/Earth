@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclasses_json import config, dataclass_json, LetterCase
-from typing import Union
+from typing import Union, List
 
 from services.alerts import Alert
 from services.gridpoint import Gridpoint, GridpointForecast
@@ -33,7 +33,7 @@ class GridpointQuantitativeValueLayer:
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
-class GeoJson:
+class GeoJsonFeature:
     """ Class representing data for a weather.gov request to Zone, Gridpoint, etc,. in GeoJson format..
         Follows NWS *GeoJson schema. """
 
@@ -47,22 +47,19 @@ class GeoJson:
 
 
 @dataclass
-class JsonLd:
-    pass
+class CollectionGeoJson:
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext ['@context']
+    type: str  # unknown meaning. Only one possible value: "FeatureCollection"
+    features: List[GeoJsonFeature]  # list of GeoJsonFeatures forming a collection.
 
 
 @dataclass
-class Collection:
-    context: None  # JsonLdContext.
-    type: None  # enum of type string, with only value being FeatureCollection.
-    features: None  # unknown.
-    title: None   # title describing the collection.
-    updated: None  # last time a modification to the collection occurred.
-    pagination: None  # more results
+class AlertCollection:
+    title: str  # title describing the Alert collection.
+    updated: str  # last time a change was made to the collection (date time in string format)
+    pagination: None  # links for retrieving more data.
 
 
-# class Foo is labeled as a placeholder, as its unknown how Zone differs from ZoneGeoJson.
-"""class Foo:
+@dataclass  # it's unknown at this time how/if to implement JsonLd.
+class JsonLd:
     pass
-
-"""
