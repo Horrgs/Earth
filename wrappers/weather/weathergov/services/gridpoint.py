@@ -54,7 +54,7 @@ class GridpointForecast:
     elevation: Dict[GridpointQuantitativeValueLayer]  # QuantitativeValue. elevation of the forecast area.
     periods: List[GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
 
-    # context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     geometry: Optional[str] = GeometryString  # GeometryString. NULLABLE.
 
 
