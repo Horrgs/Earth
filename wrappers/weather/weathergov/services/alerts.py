@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-import json
-import typing
 
 # API documentation: https://www.weather.gov/documentation/services-web-api
 
@@ -13,6 +11,7 @@ class Alert:
     geocode: None  # per NWS, "Lists of codes for NWS public zones and counties affected by the alert."
     affected_zones: list  # list of links for all the affected zones for the NWS alert of interest.
     references: None  # list of prior NWS-issued alerts that this alert update or replaces.
+
     sent: str  # ISO8601 timestamp. time the alert was sent (NOT the time the alert is in effect.)
     effective: str  # ISO8601 timestamp. the time the alert is in effect.
     onset: str  # ISO8601 timestamp. expected time of the beginning of the subject event of the alert message.

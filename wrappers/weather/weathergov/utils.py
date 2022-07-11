@@ -5,7 +5,6 @@ from typing import Union, List
 from services.alerts import Alert
 from services.gridpoint import Gridpoint, GridpointForecast
 from services.zone import Zone, ZoneForecast
-from services.point import Point
 
 
 class QuantitativeValue:

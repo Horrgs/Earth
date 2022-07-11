@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from dataclasses_json import config, dataclass_json
+from typing import List
 
 
 @dataclass
@@ -13,11 +14,11 @@ class Zone:
     name: str
     effective_date: str  # date time in str format
     expiration_date: str  # date time in str format.
-    state: None  # state where the zone is located. Includes 5 US territories, giving 55 possible values. nullable.
-    cwa: None  # three letter identifier of a NWS office. For example, BOS for NWS Boston.
-    forecast_offices: None  # list of uri strings.
-    time_zone: None  # list of time zones of the NWS Zone.
-    observation_stations: None  # list of observation stations that contribute to informing the Zone's data.
+    state: str  # state where the zone is located. Includes 5 US territories, giving 55 possible values. nullable.
+    cwa: str  # three letter identifier of a NWS office. For example, BOS for NWS Boston.
+    forecast_offices: List[str]  # list of uri strings.
+    time_zone: List[str]  # list of time zones of the NWS Zone.
+    observation_stations: List[str]  # list of observation stations that contribute to informing the Zone's data.
     radar_station: str  # Radar station for the Zone. nullable.
 
 
@@ -25,16 +26,16 @@ class Zone:
 @dataclass
 class ZoneForecast:
     context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
-    geometry: None  # GeometryString (nullable: true)
-    zone: None  # uri (API) link to the zone the forecast pertains to.
-    updated: None  # time this forecast was published (not updated???) in ISO8601 format.
-    periods: None  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
+    geometry: str  # GeometryString (nullable: true)
+    zone: str  # uri (API) link to the zone the forecast pertains to.
+    updated: str  # time this forecast was published (not updated???) in ISO8601 format.
+    periods: List[PLACEHOLDER]  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
 
 
 @dataclass
 class ZoneForecastJsonLd:
     context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     geometry: None  # GeometryString (nullable: true)
-    zone: None  # uri (API) link to the zone the forecast pertains to.
-    updated: None  # time this forecast was published (not updated???) in ISO8601 format.
-    periods: None  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
+    zone: str  # uri (API) link to the zone the forecast pertains to.
+    updated: str  # time this forecast was published (not updated???) in ISO8601 format.
+    periods: List[PLACEHOLDER_2]  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
