@@ -51,11 +51,11 @@ class GridpointForecast:
     generated_at: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     update_time: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     valid_times: str  # ISO8601 timestamp.
-    elevation: Dict  # QuantitativeValue. elevation of the forecast area.
+    elevation: Dict[GridpointQuantitativeValueLayer]  # QuantitativeValue. elevation of the forecast area.
     periods: List[GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
 
     # context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
-    geometry: Optional[str] = None  # GeometryString. NULLABLE.
+    geometry: Optional[str] = GeometryString  # GeometryString. NULLABLE.
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)

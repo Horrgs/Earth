@@ -6,7 +6,7 @@ from typing import Optional
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class Point:
-    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    context: JsonLdContext = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     id: str = field(metadata=config(field_name='@id'))
     type: str = field(metadata=config(field_name='@type'))
 
@@ -30,6 +30,6 @@ class Point:
 
     time_zone: str  # time zone of specified point.
     radar_station: str  # radar provider of specified point.
-    geometry: Optional[str] = None  # GeometryString. NULLABLE.
+    geometry: Optional[str] = GeometryString  # GeometryString. NULLABLE.
 
 
