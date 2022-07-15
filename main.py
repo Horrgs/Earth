@@ -9,17 +9,23 @@ def print_hi(name):
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
-def get_locations():
-    pass
-
-
-def get_grids():
+def get_users():
     pass
 
 
 def get_services():
     pass
 
+
+def setup(first_run=True):
+    # create services/settings file
+    # configure services & settings
+    # optionally create an account. If not, skip X step(s).
+    # if created a profile, select locations to monitor and modify their settings.
+    # if no profile created, use default settings and look up a location.
+
+
+    pass
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict
 from utils.req import req, RequestMethod
+from user.locations import Location
 
 
 def create_user(name: str):
@@ -8,11 +9,11 @@ def create_user(name: str):
     pass
 
 
-@dataclass # TODO: get registered services (e.g. weather.gov, usgs earthquakes, NASA fire)
+@dataclass  # TODO: get registered services (e.g. weather.gov, usgs earthquakes, NASA fire)
 class User:
     account_id: int  # unique numerical identifier assigned to each User.
     display_name: str  # display name of the User.
-    locations: Optional[List] = None  # list of locations the User monitors.
+    locations: Optional[List[Location]] = None  # list of locations the User monitors.
     services: Optional[str] = None  # list of services the User has registered.
 
     def register_location(self, latitude, longitude, flags=None):
