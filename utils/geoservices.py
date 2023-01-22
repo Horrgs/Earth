@@ -1,5 +1,5 @@
 from utils.req import req, RequestMethod
-
+from user.locations import Location
 
 class PositionStack:
 
@@ -18,6 +18,7 @@ class PositionStack:
         time_zone = response['timezone_module']['name']  # America/Detroit returned for parents?? # gives time zone for location.
         name = response['neighbourhood']  # get formatted name of the locale.
 
+        return Location(latitude, longitude, time_zone, name)
         # return Location object.
 
 

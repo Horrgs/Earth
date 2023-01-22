@@ -60,6 +60,20 @@ class GridpointForecast:
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
+class GridpointForecastGeoJson:
+    """ Class representing detailed forecast data for a gridpoint using advanced geolocation tools.
+    Follows NWS GridpointForecastGeoJson schema. """
+
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    type: str  # unknown meaning. Only one possible value: "Feature."
+    geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
+    properties: GridpointForecast  # returns GridpointForecast object.
+
+    id: Optional[str] = None  # unknown meaning.
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
 class Gridpoint:
     """ Class representing raw forecast data for a raw. Follows NWS Gridpoint schema.
     Depending on the raw, not all fields will be available, and it is unknown at this time which fields those are,
