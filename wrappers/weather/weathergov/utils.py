@@ -2,9 +2,9 @@ from dataclasses import dataclass, field
 from dataclasses_json import config, dataclass_json, LetterCase
 from typing import Union, List
 
-from services.alerts import Alert
-from services.gridpoint import Gridpoint, GridpointForecast
-from services.zone import Zone, ZoneForecast
+# from .services.alerts import Alert
+# from .services.gridpoint import Gridpoint, GridpointForecast
+# from services.zone import Zone, ZoneForecast
 
 
 class QuantitativeValue:
@@ -18,7 +18,7 @@ class QuantitativeValue:
         self.unit_code = item['unitCode']  # String denoting the unit of measurement. More detail at weather.gov
 
         self.quality_control = item['qualityControl']  # per NWS, "For values in observation records,
-        # the quality control flag from the MADIS system."
+        # the quality control flag from the MADIS system.
 
 
 # Schema types
@@ -41,7 +41,8 @@ class GeoJsonFeature:
     type: str  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
 
-    properties: Union[Alert, Gridpoint, GridpointForecast, Zone, ZoneForecast]
+    properties: None
+    # properties: Union[Alert, Gridpoint, GridpointForecast, Zone, ZoneForecast]
     # depending on the request, properties can take the value of Alert, Gridpoint, GridpointForecast, and more.
 
 

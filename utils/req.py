@@ -25,6 +25,7 @@ class RequestMethod(enum.Enum):
 # TODO: check if 'try' can end at specified point.
 # TODO: see if it's possible to remove first if statement.
 def req(url, method: RequestMethod, payload=None):
+    print(url)
     headers = {
         'User-Agent': 'https://www.github.com/Horrgs/Earth',
         'Feature-Flag': 'forecast_temperature_qv'
@@ -38,7 +39,7 @@ def req(url, method: RequestMethod, payload=None):
 
         if req.status_code != 200:
             pass  # raise error of bad response.
-        return req.json()  # returns json (dict) formatted response of request.
+        return req  # returns the request object.
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)
     except ValueError as e:
