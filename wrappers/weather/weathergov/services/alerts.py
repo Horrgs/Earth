@@ -9,9 +9,9 @@ class Alert:
     """ Class representing Alert schema from NWS. Contains details on an issued alert."""
     id: str  # (id)entifier of the NWS issued alert.
     area_desc: str  # description of the area affected by the NWS Alert.
-    geocode: PLACEHOLDER_  # per NWS, "Lists of codes for NWS public zones and counties affected by the alert."
+    geocode: None  # per NWS, "Lists of codes for NWS public zones and counties affected by the alert."
     affected_zones: List[str]  # list of links for all the affected zones for the NWS alert of interest.
-    references: List[PLACEHOLD]  # list of prior NWS-issued alerts that this alert update or replaces.
+    references: List[None]  # list of prior NWS-issued alerts that this alert update or replaces.
 
     sent: str  # ISO8601 timestamp. time the alert was sent (NOT the time the alert is in effect.)
     effective: str  # ISO8601 timestamp. the time the alert is in effect.

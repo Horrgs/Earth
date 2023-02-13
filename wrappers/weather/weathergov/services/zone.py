@@ -5,7 +5,7 @@ from typing import List, Optional
 
 @dataclass
 class Zone:
-    context: JsonLdContext = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     id_: str = field(metadata=config(field_name='@id'))  # uri string. given key id_ as id also exists in dataclass.
     type_: str = field(metadata=config(field_name='@type'))  # enum of str value Zone.
     id: str  # NWS Zone Id. It is a UGC identifier for a NWS forecast zone or county.
@@ -32,18 +32,18 @@ class ZoneForecastPeriod:
 @dataclass_json
 @dataclass
 class ZoneForecast:
-    context: JsonLdContext = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     zone: str  # uri (API) link to the zone the forecast pertains to.
     updated: str  # time (in ISO8601-str format) this forecast was last updated.
     periods: List[ZoneForecastPeriod]  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
-    geometry: Optional[str] = GeometryString  # GeometryString (nullable: true)
+    geometry: Optional[str] = None  # GeometryString (nullable: true)
 
 
 @dataclass
 class ZoneForecastJsonLd:
-    context: JsonLdContext = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     zone: str  # uri (API) link to the zone the forecast pertains to.
     updated: str  # time (in ISO8601-str format) this forecast was last updated.
     periods: List[ZoneForecastPeriod]  # array of (generic?) objects of forecast periods (of type dict) with keys - number, name & detailedForecast.
-    geometry: Optional[str] = GeometryString  # GeometryString (nullable: true)
+    geometry: Optional[str] = None  # GeometryString (nullable: true)
 

@@ -6,8 +6,7 @@ from typing import Optional, Dict
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class Point:
-    context: Dict = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
-    id: str = field(metadata=config(field_name='@id'))  # uri for the requested point (e.g. https://api.weather.gov/points/42.85,-78.84
+    # id: str = field(metadata=config(field_name='@id'))  # uri for the requested point (e.g. https://api.weather.gov/points/42.85,-78.84
     type: str = field(metadata=config(field_name='@type'))  # enum with only one type: Feature.
 
     cwa: str  # three letter identifier of the NWS office.
@@ -22,7 +21,7 @@ class Point:
     forecast_grid_data: str  # uri to the raw GridpointForecast data of the specified point.
 
     observation_stations: str  # uri to the relevant observation stations
-    relative_location: RelativeLocation
+    relative_location: None
     forecast_zone: str  # uri to the relevant forecast zone
 
     county: str  # uri to the relevant county zone
@@ -30,6 +29,14 @@ class Point:
 
     time_zone: str  # time zone of specified point.
     radar_station: str  # radar provider of specified point.
-    geometry: Optional[str] = GeometryString  # GeometryString. NULLABLE.
+    geometry: Optional[str] = None  # GeometryString. NULLABLE.
 
+@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass
+class PointGeoJson:
+    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    type: str  # unknown meaning. Only one possible value: "Feature."
+    geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
+    properties: Point  # returns GridpointForecast object.
 
+    id: Optional[str] = None  # unknown meaning.
