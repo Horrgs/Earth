@@ -3,7 +3,8 @@ from utils.req import req, RequestMethod
 from wrappers.weather.weathergov.services.point import PointGeoJson
 from utils.geoservices import PositionStack
 
-def get_grid_info(point): # retrieve the grid info of a given location (i.e. a latitude longitude)
+
+def get_grid_info(point):  # retrieve the grid info of a given location (i.e. a latitude longitude)
     # Preparing 'payload'
     url = "https://api.weather.gov/points/{0},{1}" # base format of the URL
     point = list(map(float, point.split(","))) # split lat-lng point mapped as floats in a list.
@@ -28,18 +29,22 @@ def get_weather(location):
     metadata = req(meta_url, RequestMethod.GET)  # cache metadata for ~X hours.
     # this metadata should be loaded into a Point  dataclass.
     p = PointGeoJson.from_json(metadata.content)
+
     point = p.properties
 
     forecast_data = req(point.forecast, RequestMethod.GET)
     return GridpointForecastGeoJson.from_json(forecast_data.content)
 
 def bob():
-    location = input("Enter location: ")
-    geocode = PositionStack().get_coordinates(location)  # not ideal, don't want class. make classless.
+    location = input("Enter location: ")  # Input formatted address (e.g. Main St, Albany)
+    geocode = PositionStack().get_location(location)  # make classless?? Gets the Location (user.locations) of input.
+
+    # get NWS locale from inputted Location by forward geocoding the address to latitude & longitude.
     nws_point = req("https://api.weather.gov/points/{0},{1}".format(geocode.latitude, geocode.longitude), RequestMethod.GET)
-    p = Point(nws_point)
-    forecast_data = req("https://api.weather.gov/gridpoints/{0}/{1},{2}/forecast", RequestMethod.GET)
-    forecast = GridpointForecastGeoJson(forecast_data)
+
+    p = PointGeoJson.from_json(nws_point.content) # load NWS locale data
+    forecast_data = req("https://api.weather.gov/gridpoints/{0}/{1},{2}/forecast", RequestMethod.GET)  # get forecast of inputted locale
+    forecast = GridpointForecastGeoJson.from_json(forecast_data.content) # load NWS forecast locale data
 
 x = get_weather('42.8864,-78.8784')
 print(x)
