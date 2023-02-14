@@ -6,15 +6,15 @@ from typing import Optional, Dict
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class Point:
-    # id: str = field(metadata=config(field_name='@id'))  # uri for the requested point (e.g. https://api.weather.gov/points/42.85,-78.84
+    id: str = field(metadata=config(field_name='@id'))  # uri for the requested point (e.g. https://api.weather.gov/points/42.85,-78.84
     type: str = field(metadata=config(field_name='@type'))  # enum with only one type: Feature.
 
     cwa: str  # three letter identifier of the NWS office.
     forecast_office: str  # uri to the NWS office that issues the forecasts. e.g. https://api.weather.gov/offices/BOS
 
     grid_id: str  # three letter identifer of the NWS office.
-    grid_x: int  # x-coordinate in the grid from the NWS office
-    grid_y: int  # y-coordinate in the grid from the NWS office.
+    grid_x: int  # x-gridpoint of specified point within the local NWS grid.
+    grid_y: int  # y-gridpoint of specified point within the local NWS grid.
 
     forecast: str  # uri to the GridpointForecast of the specified point.
     forecast_hourly: str  # uri to the GridpointForecastHourly of the specified point.
