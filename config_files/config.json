@@ -1,0 +1,26 @@
+{
+  "services": {
+    "weather": [
+      {
+        "name": "weather.gov",
+        "api_key": "",
+        "endpoint": "https://api.weather.gov/",
+        "enabled": true
+      },
+      {
+        "name": "tomorrow",
+        "api_key": "",
+        "endpoint": "",
+        "enabled": false
+      }
+    ],
+    "geocoding": [
+      {
+        "name": "",
+        "api_key": "",
+        "endpoint": "",
+        "enabled": false
+      }
+    ]
+  }
+}
