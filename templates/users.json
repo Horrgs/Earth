@@ -2,7 +2,17 @@
   {
     "display_name": "Sarah",
     "account_id": "383bbc39ncn39nsb3-382nfb83b93-39cn3",
-    "locations": [],
+    "locations": [
+      {
+        "title": "Home",
+        "formatted_address": "999 Broadway, Washington, DC",
+        "latitude": 75.5643,
+        "longitude": -34.3454,
+        "priority": 1,
+        "alerts": [],
+        "menu": []
+      }
+    ],
     "services": []
   },
   {

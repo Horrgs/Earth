@@ -1,5 +1,6 @@
 {
   "initial": true,
+  "standalone": true,
   "services": {
     "weather": [
       {

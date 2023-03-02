@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclasses_json import LetterCase, config, dataclass_json
-from typing import Optional, Dict
+from typing import Optional
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
