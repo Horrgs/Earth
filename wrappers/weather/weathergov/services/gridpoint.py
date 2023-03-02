@@ -51,11 +51,10 @@ class GridpointForecast:
     generated_at: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     update_time: str  # ISO8601 timestamp. The timestamp the forecast was generated.
     valid_times: str  # ISO8601 timestamp.
-    elevation: None
-    # elevation: Dict[GridpointQuantitativeValueLayer]  # QuantitativeValue. elevation of the forecast area.
+    elevation: QuantitativeValue  # QuantitativeValue. elevation of the forecast area.
     periods: List[GridpointForecastPeriod]  # array of (GridpointForecastPeriod's) forecast periods for the given area.
 
-    # context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
+    context: Optional[object] = field(default=None, metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     geometry: Optional[str] = None  # GeometryString. NULLABLE.
 
 
@@ -65,12 +64,12 @@ class GridpointForecastGeoJson:
     """ Class representing detailed forecast data for a gridpoint using advanced geolocation tools.
     Follows NWS GridpointForecastGeoJson schema. """
 
-    context: None = field(metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
     type: str  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
     properties: GridpointForecast  # returns GridpointForecast object.
 
     id: Optional[str] = None  # unknown meaning.
+    context: Optional[object] = field(default=None, metadata=config(field_name='@context'))  # JsonLdContext. ['@context']
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)

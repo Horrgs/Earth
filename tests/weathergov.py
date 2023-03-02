@@ -12,7 +12,7 @@ def get_grid_info(point):  # retrieve the grid info of a given location (i.e. a 
 
     push_req = req(url, RequestMethod.GET) # send GET request to weather.gov with lat-lng data.
 
-    push_req = push_req['properties'] # retrieve NWS forecast grid info for the given lat-lng
+    push_req = push_req['properties']  # retrieve NWS forecast grid info for the given lat-lng
     response = {
         'gridId': push_req['gridId'],
         'gridX': push_req['gridX'],
@@ -42,9 +42,10 @@ def bob():
     # get NWS locale from inputted Location by forward geocoding the address to latitude & longitude.
     nws_point = req("https://api.weather.gov/points/{0},{1}".format(geocode.latitude, geocode.longitude), RequestMethod.GET)
 
-    p = PointGeoJson.from_json(nws_point.content) # load NWS locale data
-    forecast_data = req("https://api.weather.gov/gridpoints/{0}/{1},{2}/forecast", RequestMethod.GET)  # get forecast of inputted locale
+    point = PointGeoJson.from_json(nws_point.content) # load NWS locale data
+    forecast_data = req(point.properties.forecast, RequestMethod.GET)  # get forecast of inputted locale
     forecast = GridpointForecastGeoJson.from_json(forecast_data.content) # load NWS forecast locale data
+    return forecast
 
-x = get_weather('42.8864,-78.8784')
-print(x)
+# x = get_weather('42.8864,-78.8784')
+# print(x)

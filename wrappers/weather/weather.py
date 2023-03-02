@@ -15,13 +15,26 @@ def get_location_metadata(location):  # retrieve the grid info of a location in 
     return PointGeoJson.from_json(metadata.content)  # return Point data for location
 
 
-def get_weather(point: PointGeoJson):  # get GridpointForecastGeoJson obj for given PointGeoJson obj.
+def get_weather_summary(point: PointGeoJson):  # get GridpointForecastGeoJson obj for given PointGeoJson obj.
     point = point.properties  # access the properties field (class type Point)
     forecast_data = req(point.forecast, RequestMethod.GET)  # access Points' forecast URL and send GET req for forecast
     return GridpointForecastGeoJson.from_json(forecast_data.content)  # return Foreceast as GridpointForecstGeoJson
 
 
-weather = get_weather(get_location_metadata('42.8864,-78.8784'))
+def get_hourly_weather(point: PointGeoJson): #
+    point = point.properties
+    forecast_hourly = req(point.forecast_hourly, RequestMethod.GET)
+    return GridpointForecastGeoJson.from_json(forecast_hourly.content)
 
+
+nws_point = get_location_metadata('42.8864,-78.8784')
+weather = get_weather_summary(nws_point)
+
+"""
 for period in weather.properties.periods:
     print("{0}: {1}".format(period.name, period.detailed_forecast))
+"""
+
+hourly = get_hourly_weather(point=nws_point)
+for period in hourly.properties.periods:
+    print(period)

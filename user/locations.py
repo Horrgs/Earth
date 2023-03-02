@@ -1,12 +1,14 @@
 from dataclasses import dataclass
+from dataclasses_json import dataclass_json, LetterCase
 from typing import Optional
 
 
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class Location:
     latitude: float  # latitude of the location.
     longitude: float  # longitude of the location.
     time_zone: str  # time zone of the location.
-    name: str  # text description of the Location (e.g. South Buffalo, Niagara Falls, California)
-    services: Optional[str] = None  # e.g. NWS, tomorrow.io
-    cache: Optional[str] = None  # cache of congregated data for location - e.g. weather, air quality, fires.
+    title: str  # text description of the Location (e.g. Home)
+    formatted_addr: str  # formatted address of the latitude longitude point.
+
