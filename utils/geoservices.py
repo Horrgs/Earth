@@ -1,5 +1,5 @@
 from utils.req import req, RequestMethod
-from user.locations import Location
+from backend.user.locations import Location
 
 
 class PositionStack:  # Wrapper for PositionStack

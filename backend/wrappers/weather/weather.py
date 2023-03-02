@@ -1,6 +1,6 @@
 from utils.req import req, RequestMethod
-from wrappers.weather.weathergov.services.gridpoint import GridpointForecastGeoJson
-from wrappers.weather.weathergov.services.point import PointGeoJson
+from backend.wrappers.weather.weathergov.services.gridpoint import GridpointForecastGeoJson
+from backend.wrappers.weather.weathergov.services.point import PointGeoJson
 
 
 def get_location_metadata(location):  # pass (+/-lat,lng) in +/- and comma, string format and retireve NWS sector.

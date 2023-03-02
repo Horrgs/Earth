@@ -1,6 +1,4 @@
 import config
-import json
-from user.services import Service
 
 
 def get_users():

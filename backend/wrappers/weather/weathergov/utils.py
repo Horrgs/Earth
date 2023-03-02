@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclasses_json import config, dataclass_json, LetterCase
-from typing import Union, List
+from typing import List
 
 # from .services.alerts import Alert
 # from .services.gridpoint import Gridpoint, GridpointForecast

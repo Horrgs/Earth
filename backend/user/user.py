@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Optional, List, Dict
+from typing import Optional, List
 from utils.req import req, RequestMethod
-from user.locations import Location
+from backend.user.locations import Location
 from dataclasses_json import dataclass_json
 import config
 import os
