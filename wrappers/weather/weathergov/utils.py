@@ -41,7 +41,7 @@ class GeoJsonFeature:
     type: str  # unknown meaning. Only one possible value: "Feature."
     geometry: None  # GeoJsonGeometry. Need to implement GeoJson library.
 
-    properties: None
+    # properties: None
     # properties: Union[Alert, Gridpoint, GridpointForecast, Zone, ZoneForecast]
     # depending on the request, properties can take the value of Alert, Gridpoint, GridpointForecast, and more.
 
