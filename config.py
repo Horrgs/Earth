@@ -3,19 +3,24 @@ import platform
 import json
 
 
-def get_template_files():
-    """Get the list of template files in the templates folder of the project directory."""
-    template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config_files')
-    # Use os.path.abspath() to get the absolute path of the current script and its directory.
-    # os.path.dirname() then gets the directory of the script, and os.path.join() appends the 'config_files' directory
-    # to create a path relative to the script file.
+def is_initial_run():
+    """
+    Check if this is the initial run of the program.
 
+    Returns:
+        bool: True if initial run, False otherwise.
+    """
+    # Get the file path of the parent directory of config files
+    parent_dir = get_earth_directory()
 
-    template_files = []  # create empty list of template files
-    for filename in os.listdir(template_folder):  # loop over files in template_folder (config_files/)
-        if filename.endswith('.json'):  # find files that end in .json
-            template_files.append(os.path.join(template_folder, filename))  # append json file to template files
-    return template_files  # return the template files from config_files/
+    # Open the config.json file in read mode
+    with open(os.path.join(parent_dir, 'config.json'), 'r') as config_file:
+        # Load the JSON data into a Python object
+        data = json.load(config_file)
+
+        # Return the value of the 'initial' key
+        return data.get('initial', True)
+
 
 def get_earth_directory():
     if platform.system() == 'Windows':  # check if system is Windows
@@ -29,6 +34,20 @@ def get_earth_directory():
     if not os.path.isdir(earth_dir):  # check if Earth/ folder exists
         create_config_files()
     return earth_dir
+
+
+def get_template_files():
+    """Get the list of template files in the templates folder of the project directory."""
+    # Use os.path.abspath() to get the absolute path of the current script and its directory.
+    # os.path.dirname() then gets the directory of the script, and os.path.join() appends the 'config_files' directory
+    # to create a path relative to the script file.
+    template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config_files')
+
+    template_files = []  # create empty list of template files
+    for filename in os.listdir(template_folder):  # loop over files in template_folder (config_files/)
+        if filename.endswith('.json'):  # find files that end in .json
+            template_files.append(os.path.join(template_folder, filename))  # append json file to template files
+    return template_files  # return the template files from config_files/
 
 
 def create_config_files():
@@ -78,6 +97,8 @@ def get_config_files():  # get dict of config files in k-v form. key is file nam
         for f in os.listdir(earth_dir):  # loop over config files
             config_files[f] = os.path.join(earth_dir, f)  # store config file paths in object
     return config_files  # return config files in k-v form.
+
+
 
 if __name__ == '__main__':
     # create_config_files()
