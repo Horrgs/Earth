@@ -13,8 +13,8 @@ def is_initial_run():
     # Get the file path of the parent directory of config files
     parent_dir = get_earth_directory()
 
-    # Open the config.json file in read mode
-    with open(os.path.join(parent_dir, 'config.json'), 'r') as config_file:
+    # Open the settings.json file in read mode
+    with open(os.path.join(parent_dir, 'settings.json'), 'r') as config_file:
         # Load the JSON data into a Python object
         data = json.load(config_file)
 

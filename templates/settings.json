@@ -1,5 +1,6 @@
 {
   "initial": true,
+  "welcome_message": "Welcome to Earth, a one-stop shop to retrieve meteorological, geologic, and other natural hazard info.",
   "standalone": true,
   "services": {
     "weather": [
