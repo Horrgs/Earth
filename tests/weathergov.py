@@ -1,8 +1,9 @@
 from backend.wrappers.weather.weathergov.services.gridpoint import GridpointForecastGeoJson
 from backend.wrappers.weather.weathergov.services.point import PointGeoJson
 from utils.req import req, RequestMethod
-from utils.geoservices import PositionStack
+from backend.wrappers.geoservices import PositionStack
 
+# This test script currently works; modify with caution.
 
 def get_grid_info(point):  # retrieve the grid info of a given location (i.e. a latitude longitude)
     # Preparing 'payload'
@@ -47,5 +48,5 @@ def bob():
     forecast = GridpointForecastGeoJson.from_json(forecast_data.content) # load NWS forecast locale data
     return forecast
 
-# x = get_weather('42.8864,-78.8784')
-# print(x)
+x = get_weather('42.8864,-78.8784')
+print(x)
