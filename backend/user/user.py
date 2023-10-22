@@ -24,12 +24,16 @@ class User:
         # for NWS service
         url = "https://api.weather.gov/points/{0},{1}".format(latitude, longitude)
         weathergov_req = req(url, RequestMethod.GET)
-        weathergov_req = weathergov_req['properties']
         response = {
-            'gridId': weathergov_req['gridId'],
-            'gridX': weathergov_req['gridX'],
-            'gridY': weathergov_req['gridY']
+            'gridId': weathergov_req['properties']['gridId'],
+            'gridX': weathergov_req['properties']['gridX'],
+            'gridY': weathergov_req['properties']['gridY']
         }
+        self.locations.append(Location(
+            longitude=weathergov_req['geometry']['corrdinate'][0],
+            latitude=weathergov_req['geometry']['corrdinate'][1],
+            time_zone=weathergov_req['properties']['']
+        ))
         self.locations.append(response)
 
     def modify_location(self):
