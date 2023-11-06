@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="left-section">
+            <img src="filler-icon.png" alt="Filler Icon" id="sidebar-toggle">
+        </div>
+        <div class="center-section">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="right-section">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="crust">
+            <img src="your-image.jpg" alt="Crust Image">
+            <h2>Main Title</h2>
+            <p>Sub-description goes here.</p>
+        </div>
+        <div class="core">
+            <nav class="sub-nav">
+                <button class="sub-nav-button" data-target="section1">Currently</button>
+                <button class="sub-nav-button" data-target="section2">Next 3-6 hours</button>
+                <button class="sub-nav-button" data-target="section3">Today/Tomorrow</button>
+            </nav>
+            <div class="core-content">
+                <section id="section1" class="active">
+                    <div id="currently" class="data_layer">
+                        <div id="current_temp">
+                            <p>Current Temperature: </p>
+                            <p>Max Temperature: </p>
+                            <p>Min Temperature: </p>
+                        </div>
+                        <div id="current_rain">
+                            <p>Precipitation Probability: </p>
+                            <p>Humidity: </p>
+                        </div>
+                        <div id="test1">
+                            <p>te: </p>
+                            <p>fo: </p>
+                        </div>
+                        <div id="test2">
+                            <p>foeo </p>
+                            <p>fefe: </p>
+                        </div>
+                    </div>
+                </section>
+                <section id="section2">
+                    <div id="next6hours" class="data_layer">
+                        <p>Next 6 hours</p>
+                        <p>Foo</p>
+                    </div>
+                </section>
+                <section id="section3">
+                    <div id="tomorrow" class="data_layer">
+                        <p>tomorrow</p>
+                        <p>Foo</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <button id="close-sidebar">Close</button>
+        <ul>
+            <li><a href="#">Sidebar Link 1</a></li>
+            <li><a href="#">Sidebar Link 2</a></li>
+            <li><a href="#">Sidebar Link 3</a></li>
+        </ul>
+    </aside>
+
+    <script src="script.js"></script>
+</body>
+</html>
