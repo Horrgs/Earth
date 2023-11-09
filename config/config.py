@@ -37,24 +37,24 @@ def get_earth_directory():
 
 
 def get_template_files():
-    """Get the list of template files in the templates folder of the project directory."""
+    """Get the list of template files in the config folder of the project directory."""
     # Use os.path.abspath() to get the absolute path of the current script and its directory.
-    # os.path.dirname() then gets the directory of the script, and os.path.join() appends the 'templates' directory
+    # os.path.dirname() then gets the directory of the script, and os.path.join() appends the 'config' directory
     # to create a path relative to the script file.
-    template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+    template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), '')
 
     template_files = []  # create empty list of template files
-    for filename in os.listdir(template_folder):  # loop over files in template_folder (templates/)
+    for filename in os.listdir(template_folder):  # loop over files in template_folder (config/)
         if filename.endswith('.json'):  # find files that end in .json
             template_files.append(os.path.join(template_folder, filename))  # append json file to template files
-    return template_files  # return the template files from templates/
+    return template_files  # return the template files from config/
 
 
 def create_config_files():
-    """Create the configuration files based on the templates."""
+    """Create the configuration files based on the config."""
     template_files = get_template_files()  # get a list of the template files
     if not template_files:
-        raise Exception('No template files found in the templates folder.')  # template files are missing
+        raise Exception('No template files found in the config folder.')  # template files are missing
 
     # set the parent directory to the users' local Documents folder
     if platform.system() == 'Windows':  # check if system is Windows
