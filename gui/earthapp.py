@@ -1,6 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
-import config
 from enum import Enum
 import backend.user.user as user
 

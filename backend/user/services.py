@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json, LetterCase
-import config
+from config import config
 import json
 from typing import List
 
@@ -9,9 +9,9 @@ from typing import List
 @dataclass
 class Service:
     name: str  # name of the service (i.e. weather.gov)
-    endpoint: str # endpoint for the services' API.
+    endpoint: str  # endpoint for the services' API.
     enabled: bool  # method for enabling/disabling a servce
-    api_key: str = None # api key for the service. None if no API key required.
+    api_key: str = None  # api key for the service. None if no API key required.
 
 
 def load_services() -> List[Service]:  # function that gets all enabled services and loads them

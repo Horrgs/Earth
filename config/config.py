@@ -98,6 +98,8 @@ def get_config_files():  # get dict of config files in k-v form. key is file nam
             config_files[f] = os.path.join(earth_dir, f)  # store config file paths in object
     return config_files  # return config files in k-v form.
 
+def update(): # update changes from memory to config
+    pass
 
 
 if __name__ == '__main__':
