@@ -24,5 +24,9 @@ class PositionStack:  # Wrapper for PositionStack
         return Location(latitude, longitude, time_zone, name)  # return Location object.
 
 
+def calculate_distance(location_1, location_2):
+    distance = 0
+    return distance
+
 class Geoapify:
     pass

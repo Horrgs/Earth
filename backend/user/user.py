@@ -1,13 +1,15 @@
+# import std libraries
 from dataclasses import dataclass
 from typing import Optional, List
+import os, uuid, json
+
+from dataclasses_json import dataclass_json # import of 3rd party library
+
+# import intra- package libraries.
 from utils.req import req, RequestMethod
 from backend.user.locations import Location
-from dataclasses_json import dataclass_json
-import config
-import os
-import json
-import uuid
-
+from config import config
+from backend.wrappers import geoservices
 
 @dataclass_json
 @dataclass  # TODO: get registered services (e.g. weather.gov, usgs earthquakes, NASA fire)
@@ -17,6 +19,18 @@ class User:
     locations: Optional[List[Location]] = None  # list of locations the User monitors.
     services: Optional[str] = None  # list of services the User has registered.
 
+    def register_location_new(self, new_location: Location):
+        for existing_location in self.locations:
+            """
+            if geoservices.calculate_distance(new_location, existing_location) < 1000 meters:
+                # location too close
+            """
+
+            if new_location.title == existing_location.title:
+                raise ValueError("Location with that name already exists!")
+
+        self.locations.append(new_location)
+        config.update()
 
     def register_location(self, latitude, longitude, flags=None):
         # for each registered service, fetch relevant metadata.
@@ -42,13 +56,22 @@ class User:
     def register_service(self, service):
         pass
 
+    def get_weather_profile(self):
+        return "f"
+
+
+
+
 
 def create_user(user: User) -> User:
     active_users = get_active_users()
-    used_ids = {u.account_id for u in active_users}
-    while True:
-        user.account_id = uuid.uuid4().int & (1<<32)-1  # generate random 32-bit unsigned integer
-        if user.account_id not in used_ids:
+    used_ids = [u.account_id for u in active_users]
+    account_id_temp = uuid.uuid4().int & (1 << 32) - 1 # generate random 32-bit unsigned integer
+    attempt = 1
+    while account_id_temp in used_ids:
+        account_id_temp = uuid.uuid4().int & (1 << 32) - 1 # generate random 32-bit unsigned integer
+        attempt += 1
+        if attempt > 10:
             break
     earth_dir = config.get_earth_directory()
     user_file_path = os.path.join(earth_dir, 'users.json')

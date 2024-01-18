@@ -1,6 +1,22 @@
 from utils.req import req, RequestMethod
 from backend.wrappers.weather.weathergov.services.gridpoint import GridpointForecastGeoJson
 from backend.wrappers.weather.weathergov.services.point import PointGeoJson
+from backend.user.user import User
+
+
+
+
+def get_weather(user: User):
+
+    for service in user.services:
+        if service.name == "NWS":
+            pass
+        elif service.name == "tomorrow.io":
+            pass
+        else:
+
+
+    pass
 
 
 def get_location_metadata(location):  # pass (+/-lat,lng) in +/- and comma, string format and retireve NWS sector.
