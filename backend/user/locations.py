@@ -7,7 +7,9 @@ from dataclasses_json import dataclass_json, LetterCase
 class Location:
     latitude: float  # latitude of the location.
     longitude: float  # longitude of the location.
+    location_id: int  # unique numeric identifier of the Location.
     time_zone: str  # time zone of the location.
     title: str  # text description of the Location (e.g. Home)
     formatted_addr: str  # formatted address of the latitude longitude point.
+    unique_id: int
 

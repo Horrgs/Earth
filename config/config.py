@@ -1,3 +1,4 @@
+# import std libs.
 import os
 import platform
 import json
@@ -5,7 +6,7 @@ import json
 
 def is_initial_run():
     """
-    Check if this is the initial run of the program.
+    Checks if this is the initial run of the program.
 
     Returns:
         bool: True if initial run, False otherwise.
@@ -18,22 +19,22 @@ def is_initial_run():
         # Load the JSON data into a Python object
         data = json.load(config_file)
 
-        # Return the value of the 'initial' key
-        return data.get('initial', True)
+        # Close the file & return the value of the 'initial' key
+        config_file.close()
+        return data.get('initial', True)  # TODO: I'm unsure on the datatype of data, where the .get() method is being called from, and why there's a bool value.
 
-
-def get_earth_directory():
+def get_earth_directory():  # finds the path to the Earth program based on OS.
     if platform.system() == 'Windows':  # check if system is Windows
-        parent_dir = os.path.expanduser(r'~/Documents/')  # r' handles the backslash (/) / Windows incompatibly issue.
+        parent_dir = os.path.expanduser(r'~/Documents/')  # r' handles the backslash (/) Windows incompatibly issue.
     elif platform.system() == 'Linux':
         parent_dir = os.path.expanduser('~/Documents/')
     else:
-        raise Exception('Unsupported operating system.')
+        raise Exception('Unsupported operating system.')  # TODO: better error handling.
 
     earth_dir = os.path.join(parent_dir, 'Earth')  # create path to the folder Earth/ in Documents/
-    if not os.path.isdir(earth_dir):  # check if Earth/ folder exists
-        create_config_files()
-    return earth_dir
+    if not os.path.isdir(earth_dir):  # check if Earth/ program folder DOES NOT exist.
+        create_config_files()  # since the program folder does not exist, we create the files.
+    return earth_dir  # return path to Earth program.
 
 
 def get_template_files():
@@ -50,11 +51,11 @@ def get_template_files():
     return template_files  # return the template files from config/
 
 
-def create_config_files():
+def create_config_files():  # creates config files, including any that are missing from an existing installation.
     """Create the configuration files based on the config."""
     template_files = get_template_files()  # get a list of the template files
     if not template_files:
-        raise Exception('No template files found in the config folder.')  # template files are missing
+        raise Exception('No template files found in the config folder.')  # template files are missing # TODO: better error handling.
 
     # set the parent directory to the users' local Documents folder
     if platform.system() == 'Windows':  # check if system is Windows
@@ -62,17 +63,17 @@ def create_config_files():
     elif platform.system() == 'Linux':
         parent_dir = os.path.expanduser('~/Documents/')
     else:
-        raise Exception('Unsupported operating system.')
+        raise Exception('Unsupported operating system.')  # TODO: better error handling.
 
-    earth_dir = os.path.join(parent_dir, 'Earth')  # create path to the folder Earth/ in Documents/
-    if not os.path.isdir(earth_dir):  # check if Earth/ folder exists
-        os.mkdir(earth_dir)  # create Earth dirrectory.
+    earth_dir = os.path.join(parent_dir, 'Earth')  # create path to the project folder Earth/ in Documents/
+    if not os.path.isdir(earth_dir):  # check if project folder Earth/ exists
+        os.mkdir(earth_dir)  # create project folder Earth directory.
 
     for template_file in template_files:  # loop over template files
         with open(template_file, 'r') as f:  # open template file in read-only
             config = json.load(f)  # load json data into python directory
 
-        config_file = os.path.join(earth_dir, os.path.basename(template_file)) # create path for the configuration file being made
+        config_file = os.path.join(earth_dir, os.path.basename(template_file)) # create path for the configuration file(s) being made
         if os.path.isfile(config_file): # check if the configuration file already exists
             print(f"Configuration file '{config_file}' already exists. Skipping.")
             continue
@@ -80,7 +81,7 @@ def create_config_files():
         with open(config_file, 'w') as f: # open the file path for the config file in write mode
             json.dump(config, f)  # write in the template data to the config file.
             print(f"Created configuration file '{config_file}'.")
-
+            f.close()  # Close file once done writing.
 
 def get_config_files():  # get dict of config files in k-v form. key is file name, value is absolute file path.
     if platform.system() == 'Windows':  # check if system is Windows
@@ -88,19 +89,17 @@ def get_config_files():  # get dict of config files in k-v form. key is file nam
     elif platform.system() == 'Linux':  # check if system is Linux
         parent_dir = os.path.expanduser('~/Documents/')  # set parent directory
     else:
-        raise Exception('Unsupported operating system.')
+        raise Exception('Unsupported operating system.')  # TODO: better error handling.
 
-    earth_dir = os.path.join(parent_dir, 'Earth')  # create path to the folder Earth/ in Documents/
+    earth_dir = os.path.join(parent_dir, 'Earth')  # create path to the program folder Earth/ in Documents/  # TODO: should we be using get_earth_directory() ?
 
     config_files = {}  # create dict to store config file paths
-    if os.path.isdir(earth_dir):  # check if Earth/ folder exists
-        for f in os.listdir(earth_dir):  # loop over config files
-            config_files[f] = os.path.join(earth_dir, f)  # store config file paths in object
-    return config_files  # return config files in k-v form.
+    if os.path.isdir(earth_dir):  # check if program folder Earth/ folder exists
+        for f in os.listdir(earth_dir):  # loop files in program folder Earth/
+            config_files[f] = os.path.join(earth_dir, f)  # store config file paths in config_files dict by file name.
+    return config_files  # return dict of config files in filename-filepath (k-v) form.
 
-def update(): # update changes from memory to config
-    pass
-
+#  TODO: update() method removed - methods that update records (e.g. register location) should update to disk, instead of a one-size-fits-all method that will update unnecessary data. This comment can be removed next commit.
 
 if __name__ == '__main__':
     # create_config_files()
