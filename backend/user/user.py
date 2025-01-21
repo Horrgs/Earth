@@ -1,13 +1,14 @@
 # import std libraries
 from dataclasses import dataclass
 from typing import Optional, List
-import os, uuid, json
+import os, uuid, json, logging
 
 from dataclasses_json import dataclass_json  # import of 3rd party library
 
 # import intra- package libraries.
 from utils.req import req, RequestMethod
 from backend.user.locations import Location
+from backend.user.services import Service
 from config import config
 from backend.wrappers import geoservices
 
@@ -20,8 +21,12 @@ class User:
     locations: Optional[List[Location]] = None  # list of locations the User monitors.
     services: Optional[str] = None  # list of services the User has registered.
 
-    def register_location_new(self, new_location: Location):
-        for existing_location in self.locations:  # TODO: self.locations is None as no data is ever loaded into it.
+    def __post_init__(self):
+        pass
+
+
+    def register_location(self, new_location: Location): # allows a User to register a location.
+        for existing_location in self.locations:  # TODO: if no locations have been registered (e.g. new users), self.locations is likely None. Could cause error.
             """
             if geoservices.calculate_distance(new_location, existing_location) < 1000 meters:
                 # location too close
@@ -35,7 +40,53 @@ class User:
         self.locations.append(new_location)
         config.update()
 
-    # this method - register_location() - should be moved to wrappers/weather/weathergov
+    def modify_location(self):  # function for modifying the data for an existing Location
+        pass
+
+    def register_service(self, service):  # function for registering a new Service.
+        pass
+
+    def load_services(self) -> List[Service]:  # function that returns a list of Service objects of enabled Services.
+        config_files = config.get_config_files()  # get config files
+        if 'settings.json' not in config_files:  # check if settings.json exists and create if necessary.
+            config.create_config_files()  # create config files. it will only create what's missing (i.e. settings.json)
+            logging.info('settings.json not in {0}. Creating file(s).'.format(config.get_earth_directory()))
+
+        enabled_subservices = []  # create empty list to store enabled services
+        with open(config_files['settings.json'], mode='r') as config_file:  # open settings.json
+            service_data = json.load(config_file)['services']  # load json data into dict and select services
+            for service, subservices in service_data.items():  # loop over each service and a list of their subservices
+                enabled_subservices.extend([subservice for subservice in subservices if
+                                            subservice["enabled"]])  # add subservices that are enabled
+        config_file.close()  # close settings.json
+
+        services = [Service.from_dict(subservice) for subservice in
+                    enabled_subservices]  # returns list of Service objects from the list of enabled ones in enabled_subservices
+        return services
+
+    def modify_service(self):  # method for modifying the data of a Service registered to the User.
+        pass
+
+
+    def get_weather_profile(self):
+        return "f"
+
+"""    
+    method deprecated in favor of modify_service(). Commented out as not in use.
+    def register_key(self, service: Service):
+        services = self.load_services()  # find all services that are enabled - # TODO: we should avoid calling this each time a key needs to be registered, this should be cached.
+        service_names = [s.name for s in services]  # find all the names of all the services that are enabled.
+        if service.name not in service_names:
+            # TODO: raise Error indicating that this service does not exist and thus cannot be registered
+            pass
+        else:
+            config_files = config.get_config_files()  # fetches dict of config files in file_name-file_path (k-v) format.
+            with open(config_files['settings.json'], mode='r') as config_file:  # open settings.json
+                service_data = json.load(config_file)['services']  # load json data into dict and select services
+            # service_data.extend(service.to_json())  # TODO: this LoC might be incorrect. One, we don't write this data to disk etc,. Two, extend() *ADDS* to the end of the list, but we are registering already EXISTING services.
+            config_file.close() 
+
+    # this method - register_location() - should be moved to wrappers/weather/weathergov. commented out as not in use.
     def register_location(self, latitude, longitude, flags=None):
         # for each registered service, fetch relevant metadata.
 
@@ -52,20 +103,7 @@ class User:
             latitude=weathergov_req['geometry']['corrdinate'][1],
             time_zone=weathergov_req['properties']['']
         ))
-        self.locations.append(response)
-
-    def modify_location(self):
-        pass
-
-    def register_service(self, service):
-        pass
-
-    def get_weather_profile(self):
-        return "f"
-
-
-
-
+        self.locations.append(response)"""
 
 def create_user(user: User) -> User:
     active_users = get_active_users()
