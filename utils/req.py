@@ -1,5 +1,6 @@
 import enum
 import requests
+import json
 
 # module for request & request-adjacent methods.
 
@@ -26,19 +27,24 @@ class RequestMethod(enum.Enum):
 # TODO: see if it's possible to remove first if statement.
 def req(url, method: RequestMethod, payload=None):
     print(url)
-    headers = {
-        'User-Agent': 'https://www.github.com/Horrgs/Earth',
-        'Feature-Flag': 'forecast_temperature_qv'
+
+    headers = {  # TODO: currently manually building headers, and doesn't handle multiple services. needs to handle each service & automatically built.
+        'User-Agent': 'Mozilla/5.0',
+        'Accept-Encoding': 'gzip,deflate,br',
+        'Accept-Language': 'en-US,en;q = 0.5',
+        'Connection': 'keep-alive',
+        'Feature-Flag': 'forecast_temperature_qv',
+        'Host': 'api.weather.gov',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q = 0.8'
     }
+
     try:
-        if payload is not None:  # check if a payload is specified for HTTP request.
-            req = requests.request(method=method.value, url=url, headers=headers, data=payload)  # valid payload to send with HTTP request.
-        else:
-            req = requests.request(method.value, headers=headers, url=url)  # no payload to send, send remaining info.
+        req = requests.request(method=method.value, url=url, headers=headers, data=payload)  # valid payload to send with HTTP request.
         # TODO: check if try can end here.
 
         if req.status_code != 200:
             pass  # raise error of bad response.
+        print(json.loads(req.content))
         return req  # returns the request object.
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)

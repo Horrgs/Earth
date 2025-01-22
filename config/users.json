@@ -9,8 +9,17 @@
         "latitude": 75.5643,
         "longitude": -34.3454,
         "priority": 1,
-        "alerts": [],
-        "menu": []
+        "services": {
+          "weather": [
+            {
+              "name": "weather.gov",
+              "gridpoints": {
+                "x": 10,
+                "y": 10
+              }
+            }
+          ]
+        }
       }
     ],
     "services": {
@@ -19,7 +28,9 @@
           "name": "weather.gov",
           "api_key": "",
           "endpoint": "https://api.weather.gov/",
-          "enabled": true
+          "enabled": true,
+
+
         },
         {
           "name": "tomorrow",

@@ -99,8 +99,6 @@ def get_config_files():  # get dict of config files in k-v form. key is file nam
             config_files[f] = os.path.join(earth_dir, f)  # store config file paths in config_files dict by file name.
     return config_files  # return dict of config files in filename-filepath (k-v) form.
 
-#  TODO: update() method removed - methods that update records (e.g. register location) should update to disk, instead of a one-size-fits-all method that will update unnecessary data. This comment can be removed next commit.
-
 if __name__ == '__main__':
     # create_config_files()
     print(get_config_files())

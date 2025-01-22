@@ -35,10 +35,10 @@ class User:
             """
 
             if new_location.title == existing_location.title:
-                raise ValueError("Location with that name already exists!")  # TODO: improve error handling.
-
+                raise ValueError("Location with that name already exists!")  # TODO: improve error handling. Should handle the error and keep trying again until its a valid name.
         self.locations.append(new_location)
         config.update()
+
 
     def modify_location(self):  # function for modifying the data for an existing Location
         pass

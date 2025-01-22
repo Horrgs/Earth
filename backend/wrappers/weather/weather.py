@@ -4,8 +4,6 @@ from backend.wrappers.weather.weathergov.services.point import PointGeoJson
 from backend.user.user import User
 
 
-
-
 def get_weather(user: User):
 
     for service in user.services:
@@ -14,8 +12,7 @@ def get_weather(user: User):
         elif service.name == "tomorrow.io":
             pass
         else:
-
-
+            pass
     pass
 
 
